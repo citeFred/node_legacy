@@ -1,6 +1,8 @@
 const express = require('express')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
+const mysql = require('mysql2');
+
 const app = express()
 const port = 3000
 
@@ -11,6 +13,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse JSON
 app.use(bodyParser.json())
 
+// MySQL connection
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "inyongkim",
+    password: "1234",
+    port: 3306,
+    database: "nodejs_sample",
+    insecureAuth: true,
+});
 
 // Routes
 app.get('/', (req, res) => {
