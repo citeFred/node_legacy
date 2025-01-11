@@ -19,6 +19,13 @@ app.get('/users', (req, res) => {
     res.render('users');
 })
 
+app.get('/visit', (req, res) => {
+    res.render('visit');
+})
+  
+app.get('/contact', (req, res) => {
+    res.render('contact');
+})
 
 // Server listener
 app.listen(port, () => {
