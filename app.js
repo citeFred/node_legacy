@@ -27,6 +27,17 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 })
 
+app.post('/api/contact', (req, res) => {
+    const name = req.body.name;
+    const phone = req.body.phone;
+    const email = req.body.email;
+    const memo = req.body.memo;
+  
+    const data = `${name} ${phone} ${email} ${memo}`
+  
+    res.send(data);
+})
+
 // Server listener
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
