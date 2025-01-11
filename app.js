@@ -1,35 +1,26 @@
 const express = require('express')
+const ejs = require('ejs')
 const app = express()
 const port = 3000
 
-// app.get('/', function (req, res) {
-//   res.send('Hello World')
-// })
+app.set('view engine', 'ejs');
+app.set('views', './views')
 
-//화살표함수를 사용하는 동일한 Get 요청
+// Routes
 app.get('/', (req, res) => {
-    console.log('Got a GET request from Client')
-    res.send('Got a response from Server');
+    res.render('index');
 })
 
-//애플리케이션의 홈 페이지인 루트 라우트(/)에서 POST 요청에 응답:
-app.post('/', function (req, res) {
-    console.log('Got a POST request from Client')
-    res.send('Got a response from Server');
+app.get('/blog', (req, res) => {
+    res.render('blog');
 })
 
-//user 라우트에 대한 PUT 요청에 응답:
-app.put('/user', function (req, res) {
-    console.log('Got a PUT request from Client')
-    res.send('Got a response from Server');
+app.get('/users', (req, res) => {
+    res.render('users');
 })
 
-//user 라우트에 대한 DELETE 요청에 응답:
-app.delete('/user', function (req, res) {
-    console.log('Got a DELETE request from Client')
-    res.send('Got a response from Server');
-})
 
+// Server listener
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
