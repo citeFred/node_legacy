@@ -1,10 +1,16 @@
 const express = require('express')
 const ejs = require('ejs')
+const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
 
 app.set('view engine', 'ejs');
 app.set('views', './views')
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse JSON
+app.use(bodyParser.json())
+
 
 // Routes
 app.get('/', (req, res) => {
