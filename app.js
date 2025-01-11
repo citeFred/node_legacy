@@ -13,14 +13,27 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse JSON
 app.use(bodyParser.json())
 
-// MySQL connection
-const connection = mysql.createConnection({
+// MySQL connection Pool :
+// MySQL 커넥션을 사용할 때는 주로 커넥션 풀을 이용하여 관리하는 것이 권장
+// 여러 요청이 동시에 처리될 때 효율적으로 커넥션을 관리
+const connectionPool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PW,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
+    connectionLimit: 10, // 최대 연결 수 설정
     insecureAuth: true,
+});
+
+// MySQL connection check
+connectionPool.getConnection((err, connection) => {
+    if (err) {
+      console.error('MySQL에 연결 중 에러 발생:', err);
+    } else {
+      console.log('MySQL에 연결되었습니다.');
+      connection.release();
+    }
 });
 
 // Routes
@@ -50,10 +63,18 @@ app.post('/api/contact', (req, res) => {
     const email = req.body.email;
     const memo = req.body.memo;
   
-    const data = `${name} ${phone} ${email} ${memo}`
+    const SQL_Query = `INSERT INTO contact(name, phone, email, memo, create_at, modify_at) VALUES ('${name}','${phone}','${email}','${memo}',NOW(), NOW())`;
   
-    res.send(data);
-})
+    connectionPool.query(SQL_Query, (err, result) => {
+        if (err) {
+            console.error('데이터 삽입 중 에러 발생:', err);
+            res.status(500).send('내부 서버 오류');
+        } else {
+            console.log('데이터가 삽입되었습니다.');
+            res.send("<script>alert('문의사항이 등록되었습니다.'); location.href='/'</script>");
+        }
+    });
+});
 
 // Server listener
 app.listen(port, () => {
