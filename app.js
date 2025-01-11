@@ -12,6 +12,8 @@ app.set('views', './views')
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse JSON
 app.use(bodyParser.json())
+// app uses static files from 'public' folder
+app.use(express.static(__dirname+'/public'))
 
 // MySQL connection Pool :
 // MySQL 커넥션을 사용할 때는 주로 커넥션 풀을 이용하여 관리하는 것이 권장
