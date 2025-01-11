@@ -76,6 +76,22 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
+app.get('/contactList', (req, res) => {
+    const selectQuery = `select * from contact order by id desc`;
+
+    // 얻어온 커넥션을 사용하여 쿼리를 실행합니다.
+    connectionPool.query(selectQuery, (err, result) => {
+        if (err) {
+            console.error('데이터 조회 중 에러 발생:', err);
+            res.status(500).send('내부 서버 오류');
+        } else {
+            console.log('데이터가 조회되었습니다.');
+            console.log(result);
+            res.render('contactList', {lists:result});
+        }
+    });
+});
+
 // Server listener
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
