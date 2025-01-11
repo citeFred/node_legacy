@@ -26,17 +26,47 @@
             <td><%=item.modify_at%></td>
             <td><%=item.status%></td>
             <td>
-                <form action="/api/contactUpdate/<%=item.id%>" method="post">
-                    <button type="submit" onclick="return confirm('해당 문의를 완료 하시겠습니까?')">COMPLETE</button>
-                </form>
+                <button type="button" onclick="updateContact(<%=item.id%>)">UPDATE</button>
             </td>
             <td>
-                <form action="/api/contactDelete/<%=item.id%>" method="post">
-                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">DELETE</button>
-                </form>
+                <button type="button" onclick="deleteContact(<%=item.id%>)">DELETE</button>
             </td>
         </tr>
         <% }) %>
     </table>
-
+    <script>
+        function updateContact(contactId) {
+            // AJAX를 사용하여 PUT 요청 보내기
+            $.ajax({
+                url: `/api/contactUpdate/${contactId}`,
+                type: 'PUT',
+                success: function(response) {
+                    // 업데이트 성공 시의 처리
+                    alert('문의사항이 업데이트되었습니다.');
+                    location.reload(); // 페이지 새로고침 또는 다른 업데이트 방식 선택
+                },
+                error: function(error) {
+                    // 오류 처리
+                    console.error('업데이트 오류:', error);
+                }
+            });
+        }
+    
+        function deleteContact(contactId) {
+            // AJAX를 사용하여 DELETE 요청 보내기
+            $.ajax({
+                url: `/api/contactDelete/${contactId}`,
+                type: 'DELETE',
+                success: function(response) {
+                    // 삭제 성공 시의 처리
+                    alert('문의사항이 삭제되었습니다.');
+                    location.reload(); // 페이지 새로고침 또는 다른 삭제 방식 선택
+                },
+                error: function(error) {
+                    // 오류 처리
+                    console.error('삭제 오류:', error);
+                }
+            });
+        }
+    </script>
 <%-include('layouts/footer.ejs')%>

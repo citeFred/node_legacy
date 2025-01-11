@@ -92,7 +92,7 @@ app.get('/contactList', (req, res) => {
     });
 });
 
-app.post('/api/contactDelete/:id', (req, res) => {
+app.delete('/api/contactDelete/:id', (req, res) => {
     const id = req.params.id;
     const deleteQuery = `delete from contact where id='${id}'`;
     connectionPool.query(deleteQuery, (err, result) => {
@@ -106,7 +106,7 @@ app.post('/api/contactDelete/:id', (req, res) => {
     });
 });
 
-app.post('/api/contactUpdate/:id', (req, res) => {
+app.put('/api/contactUpdate/:id', (req, res) => {
     const id = req.params.id;
     const status = "done";
     const updateQuery = `UPDATE contact SET status = '${status}' WHERE id = '${id}';`;
