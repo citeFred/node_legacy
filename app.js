@@ -60,21 +60,22 @@ app.get('/contact', (req, res) => {
 })
 
 app.post('/api/contact', (req, res) => {
+    // const { name, phone, email, memo } = req.body; // 구조 분해 + 각 변수 할당
     const name = req.body.name;
     const phone = req.body.phone;
     const email = req.body.email;
     const memo = req.body.memo;
   
-    const SQL_Query = `INSERT INTO contact(name, phone, email, memo, create_at, modify_at) VALUES ('${name}','${phone}','${email}','${memo}',NOW(), NOW())`;
+    const insertQuery = `INSERT INTO contact(name, phone, email, memo, create_at, modify_at) VALUES ('${name}', '${phone}', '${email}', '${memo}', NOW(), NOW())`;
   
-    connectionPool.query(SQL_Query, (err, result) => {
+    connectionPool.query(insertQuery, (err, result) => {
         if (err) {
             console.error('데이터 삽입 중 에러 발생:', err);
-            res.status(500).send('내부 서버 오류');
-        } else {
-            console.log('데이터가 삽입되었습니다.');
-            res.send("<script>alert('문의사항이 등록되었습니다.'); location.href='/'</script>");
+            return res.status(500).json({ message: '내부 서버 오류' }); // JSON 응답
         }
+        
+        console.log('데이터가 삽입되었습니다.');
+        res.status(201).json({ message: '문의사항이 등록되었습니다.', contactId: result.insertId }); // JSON 응답
     });
 });
 

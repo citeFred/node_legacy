@@ -208,23 +208,25 @@
       <p><span class="glyphicon glyphicon-envelope"></span> citefred@gmail.com</p>
     </div>
     <div class="col-sm-7 slideanim">
-      <div class="row">
-        <div class="col-sm-6 form-group">
-          <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+      <form id="contactForm">
+        <div class="row">
+          <div class="col-sm-6 form-group">
+            <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+          </div>
+          <div class="col-sm-6 form-group">
+            <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+          </div>
+          <div class="col-sm-6 form-group">
+            <input class="form-control" id="phone" name="phone" placeholder="PhoneNumber(Optional)" type="tel">
+          </div>
         </div>
-        <div class="col-sm-6 form-group">
-          <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+        <textarea class="form-control" id="comments" name="memo" placeholder="Comment any notes.." rows="5"></textarea><br>
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <button class="btn btn-default pull-right" type="button" onclick="createContact()">Send</button>
+          </div>
         </div>
-        <div class="col-sm-6 form-group">
-            <input class="form-control" id="phone" name="phone" placeholder="PhoneNumber(Optional)" type="email">
-        </div>
-      </div>
-      <textarea class="form-control" id="comments" name="memo" placeholder="Comment any notes.." rows="5"></textarea><br>
-      <div class="row">
-        <div class="col-sm-12 form-group">
-          <button class="btn btn-default pull-right" type="submit" onclick="">Send</button>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
