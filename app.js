@@ -1,7 +1,7 @@
 const express = require('express')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
-const mysql = require('mysql2');
+const contactModel = require('./models/contactModel')
 require('dotenv').config();
 const app = express()
 const port = 3000
@@ -12,51 +12,28 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static(__dirname+'/public'))
 
-// MySQL connection Pool :
-const connectionPool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    connectionLimit: 10,
-    insecureAuth: true,
-});
-
-// MySQL connection check
-connectionPool.getConnection((err, connection) => {
-    if (err) {
-      console.error('MySQL에 연결 중 에러 발생:', err);
-    } else {
-      console.log('MySQL에 연결되었습니다.');
-      connection.release();
-    }
-});
-
 // Router
 app.get('/', (req, res) => {
-    const selectQuery = `select * from contact order by id desc`;
-    connectionPool.query(selectQuery, (err, result) => {
+    contactModel.getContacts((err, result) => {
         if (err) {
             console.error('데이터 조회 중 에러 발생:', err);
             res.status(500).send('내부 서버 오류');
         } else {
             console.log('데이터가 조회되었습니다.');
-            console.log(result);
-            res.render('index', {lists:result});
+            res.render('index', { lists: result });
         }
     });
 });
 
 app.post('/api/contact', (req, res) => {
-    const name = req.body.name;
-    const phone = req.body.phone;
-    const email = req.body.email;
-    const memo = req.body.memo;
-  
-    const insertQuery = `INSERT INTO contact(name, phone, email, memo, create_at, modify_at) VALUES ('${name}', '${phone}', '${email}', '${memo}', NOW(), NOW())`;
-  
-    connectionPool.query(insertQuery, (err, result) => {
+    const contact = {
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+        memo: req.body.memo
+    };
+
+    contactModel.addContact(contact, (err, result) => {
         if (err) {
             console.error('데이터 삽입 중 에러 발생:', err);
             return res.status(500).json({ message: '내부 서버 오류' });
@@ -68,8 +45,8 @@ app.post('/api/contact', (req, res) => {
 
 app.delete('/api/contactDelete/:id', (req, res) => {
     const id = req.params.id;
-    const deleteQuery = `delete from contact where id='${id}'`;
-    connectionPool.query(deleteQuery, (err, result) => {
+
+    contactModel.deleteContact(id, (err, result) => {
         if (err) {
             console.error('데이터 삭제 중 에러 발생:', err);
             res.status(500).send('내부 서버 오류');
@@ -82,9 +59,8 @@ app.delete('/api/contactDelete/:id', (req, res) => {
 
 app.put('/api/contactUpdate/:id', (req, res) => {
     const id = req.params.id;
-    const status = "done";
-    const updateQuery = `UPDATE contact SET status = '${status}' WHERE id = '${id}';`;
-    connectionPool.query(updateQuery, (err, result) => {
+
+    contactModel.updateContactStatus(id, (err, result) => {
         if (err) {
             console.error('데이터 업데이트 중 에러 발생:', err);
             res.status(500).send('내부 서버 오류');
@@ -97,5 +73,5 @@ app.put('/api/contactUpdate/:id', (req, res) => {
 
 // Server listener
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Example app listening on port ${port}`);
+});
