@@ -1,0 +1,58 @@
+<div id="contact" class="container-fluid bg-grey">
+    <h2 class="text-center">CONTACT</h2>
+    <div class="row">
+      <div class="col-sm-5">
+        <p>Contact down below and I'll get back to you soon.</p>
+        <p><span class="glyphicon glyphicon-map-marker"></span> Gyeonggi-do, Namyangju</p>
+        <p><span class="glyphicon glyphicon-phone"></span> +082 10-2872-5915</p>
+        <p><span class="glyphicon glyphicon-envelope"></span> citefred@gmail.com</p>
+      </div>
+      <div class="col-sm-7 slideanim">
+        <form id="contactForm">
+          <div class="row">
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input class="form-control" id="phone" name="phone" placeholder="PhoneNumber(Optional)" type="tel">
+            </div>
+          </div>
+          <textarea class="form-control" id="comments" name="memo" placeholder="Comment any notes.." rows="5"></textarea><br>
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <button class="btn btn-default pull-right" type="button" onclick="createContact()">Send</button>
+              <button class="btn btn-default pull-right" type="button" data-toggle="modal" data-target="#myModal">Contact List(ADMIN)</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal"  role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Contact Lists</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+                  <%-include('contact-list-modal.ejs')%>
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  

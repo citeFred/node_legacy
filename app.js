@@ -39,28 +39,11 @@ connectionPool.getConnection((err, connection) => {
 });
 
 // Routes
-app.get('/', (req, res) => {
-    res.render('index');
-})
-
-app.get('/blog', (req, res) => {
-    res.render('blog');
-})
-
-app.get('/users', (req, res) => {
-    res.render('users');
-})
-
-app.get('/visit', (req, res) => {
-    res.render('visit');
-})
-  
-app.get('/contact', (req, res) => {
-    res.render('contact');
-})
+// app.get('/', (req, res) => {
+//     res.render('index');
+// })
 
 app.post('/api/contact', (req, res) => {
-    // const { name, phone, email, memo } = req.body; // 구조 분해 + 각 변수 할당
     const name = req.body.name;
     const phone = req.body.phone;
     const email = req.body.email;
@@ -79,7 +62,7 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
-app.get('/contactList', (req, res) => {
+app.get('/', (req, res) => {
     const selectQuery = `select * from contact order by id desc`;
 
     // 얻어온 커넥션을 사용하여 쿼리를 실행합니다.
@@ -90,7 +73,7 @@ app.get('/contactList', (req, res) => {
         } else {
             console.log('데이터가 조회되었습니다.');
             console.log(result);
-            res.render('contactList', {lists:result});
+            res.render('index', {lists:result});
         }
     });
 });
