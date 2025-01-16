@@ -7,12 +7,12 @@ const viewController = require('../controllers/viewController');
 router.get('/', viewController.getIndexWithContacts);
 
 // 데이터 삽입
-router.post('/contact/', apiController.addContact);
+router.post('/api/contact/', apiController.addContact);
 
 // 데이터 삭제
-router.delete('/contact/:id', apiController.deleteContact);
+router.delete('/api/contact/:id', apiController.deleteContact);
 
 // 데이터 업데이트
-router.put('/contact/:id', apiController.updateContact);
+router.put('/api/contact/:id', apiController.updateContact);
 
 module.exports = router;

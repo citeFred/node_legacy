@@ -71,7 +71,7 @@ async function createContact() {
 
 async function updateContact(contactId) {
   try {
-      const response = await fetch(`/api/contactUpdate/${contactId}`, {
+      const response = await fetch(`/api/contact/${contactId}`, {
           method: 'PUT', // HTTP 메서드
           headers: {
               'Content-Type': 'application/json' // 데이터 형식 지정 (필요한 경우)
@@ -93,7 +93,7 @@ async function updateContact(contactId) {
 function deleteContact(contactId) {
   // AJAX를 사용하여 DELETE 요청 보내기
   $.ajax({
-      url: `/api/contactDelete/${contactId}`,
+      url: `/api/contact/${contactId}`,
       type: 'DELETE',
       success: function(response) {
           // 삭제 성공 시의 처리
