@@ -8,23 +8,18 @@ const port = 3000
 
 app.set('view engine', 'ejs');
 app.set('views', './views')
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-// parse JSON
 app.use(bodyParser.json())
-// app uses static files from 'public' folder
 app.use(express.static(__dirname+'/public'))
 
 // MySQL connection Pool :
-// MySQL 커넥션을 사용할 때는 주로 커넥션 풀을 이용하여 관리하는 것이 권장
-// 여러 요청이 동시에 처리될 때 효율적으로 커넥션을 관리
 const connectionPool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PW,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
-    connectionLimit: 10, // 최대 연결 수 설정
+    connectionLimit: 10,
     insecureAuth: true,
 });
 
@@ -38,10 +33,20 @@ connectionPool.getConnection((err, connection) => {
     }
 });
 
-// Routes
-// app.get('/', (req, res) => {
-//     res.render('index');
-// })
+// Router
+app.get('/', (req, res) => {
+    const selectQuery = `select * from contact order by id desc`;
+    connectionPool.query(selectQuery, (err, result) => {
+        if (err) {
+            console.error('데이터 조회 중 에러 발생:', err);
+            res.status(500).send('내부 서버 오류');
+        } else {
+            console.log('데이터가 조회되었습니다.');
+            console.log(result);
+            res.render('index', {lists:result});
+        }
+    });
+});
 
 app.post('/api/contact', (req, res) => {
     const name = req.body.name;
@@ -54,27 +59,10 @@ app.post('/api/contact', (req, res) => {
     connectionPool.query(insertQuery, (err, result) => {
         if (err) {
             console.error('데이터 삽입 중 에러 발생:', err);
-            return res.status(500).json({ message: '내부 서버 오류' }); // JSON 응답
+            return res.status(500).json({ message: '내부 서버 오류' });
         }
-        
         console.log('데이터가 삽입되었습니다.');
-        res.status(201).json({ message: '문의사항이 등록되었습니다.', contactId: result.insertId }); // JSON 응답
-    });
-});
-
-app.get('/', (req, res) => {
-    const selectQuery = `select * from contact order by id desc`;
-
-    // 얻어온 커넥션을 사용하여 쿼리를 실행합니다.
-    connectionPool.query(selectQuery, (err, result) => {
-        if (err) {
-            console.error('데이터 조회 중 에러 발생:', err);
-            res.status(500).send('내부 서버 오류');
-        } else {
-            console.log('데이터가 조회되었습니다.');
-            console.log(result);
-            res.render('index', {lists:result});
-        }
+        res.status(201).json({ message: '문의사항이 등록되었습니다.', contactId: result.insertId });
     });
 });
 
@@ -96,7 +84,6 @@ app.put('/api/contactUpdate/:id', (req, res) => {
     const id = req.params.id;
     const status = "done";
     const updateQuery = `UPDATE contact SET status = '${status}' WHERE id = '${id}';`;
-
     connectionPool.query(updateQuery, (err, result) => {
         if (err) {
             console.error('데이터 업데이트 중 에러 발생:', err);
